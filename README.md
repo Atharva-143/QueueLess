@@ -14,6 +14,23 @@ QueueLess is a full-stack web application designed to simplify queue management.
 - **Rate Limiting:** Limit excessive authentication and queue requests.
 - **Database Integration:** Store user, service, and queue information in MySQL.
 
+## Application Screenshots
+
+### Login Page
+![QueueLess Login](screenshots/queueless-login.png)
+
+### Customer Dashboard
+![Customer Dashboard](screenshots/queueless-customer-dashboard.png)
+
+### Staff Dashboard
+![Staff Dashboard](screenshots/queueless-staff-dashboard.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/queueless-admin-dashboard.png)
+
+### Real-Time Queue Status
+![Queue Status](screenshots/queueless-queue-status.png)
+
 ## Technology Stack
 
 **Frontend**
