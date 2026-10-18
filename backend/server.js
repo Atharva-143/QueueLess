@@ -764,6 +764,9 @@ app.get(
 
         FROM queue_entries
         WHERE service_id = ?
+        AND status = 'completed'
+        AND serving_started_at IS NOT NULL
+        AND completed_at IS NOT NULL
     `;
 
         db.query(sql, [service_id], (err, result) => {
@@ -845,6 +848,7 @@ app.get(
                     WHERE status = 'completed'
                     AND serving_started_at IS NOT NULL
                     AND completed_at IS NOT NULL
+                    AND id NOT IN (18, 30)
                 ) AS average_service_time
         `;
 
