@@ -848,8 +848,8 @@ app.get(
                     WHERE status = 'completed'
                     AND serving_started_at IS NOT NULL
                     AND completed_at IS NOT NULL
-                    AND id NOT IN (18, 30)
-                ) AS average_service_time
+                    AND is_test = 0
+                    ) AS average_service_time
         `;
 
         const serviceSql = `
