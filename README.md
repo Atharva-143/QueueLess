@@ -81,7 +81,14 @@ git clone https://github.com/Atharva-143/QueueLess.git
 cd QueueLess
 ```
 
-### 2. Configure the Backend
+### 2. Set Up the Database
+
+1. Ensure that MySQL Server is running.
+2. Open MySQL Workbench and connect to your MySQL server.
+3. Open the `database/schema.sql` file from the cloned repository.
+4. Execute the SQL script to create the `queueless` database and its tables.
+
+### 3. Configure the Backend
 
 Open a terminal and run:
 
@@ -104,11 +111,9 @@ Replace the example values with your own database credentials and a strong, rand
 
 **Important:** Never upload your actual `.env` file or expose your passwords and secrets publicly.
 
-Ensure that MySQL is running and the `queueless` database and required tables have been created before starting the backend.
-
 Start the backend using the appropriate script defined in `backend/package.json`.
 
-### 3. Configure the Frontend
+### 4. Configure the Frontend
 
 Open a second terminal from the project directory and run:
 
@@ -122,7 +127,14 @@ Open the local URL displayed by Vite, usually:
 
 http://localhost:5173
 
-Make sure the backend is running at the address configured by the frontend.
+Make sure the backend is running and the frontend is configured to communicate with it.
+
+### 5. Verify the Application
+
+- Confirm that MySQL is running and the backend connects successfully.
+- Register an account or log in.
+- Test the queue workflow by joining a queue and checking its status.
+- Verify that staff can manage the queue.
 
 ## Security
 
