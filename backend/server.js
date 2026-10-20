@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const rateLimit = require("express-rate-limit");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -35,7 +36,7 @@ function withServiceLock(serviceId, operation) {
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: FRONTEND_URL,
         methods: ["GET", "POST"]
     }
 });
@@ -49,7 +50,7 @@ io.on("connection", (socket) => {
 });
 
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: FRONTEND_URL
 }));
 app.use(express.json());
 
