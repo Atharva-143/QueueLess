@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const socket = io(API_URL);
 
 function QueueStatus({ services, refreshTrigger, tokenNumber }) {
     const [queue, setQueue] = useState([]);
@@ -18,7 +19,7 @@ function QueueStatus({ services, refreshTrigger, tokenNumber }) {
             return;
         }
 
-        fetch(`http://localhost:5000/api/queue/${serviceId}`)
+        fetch(`${API_URL}/api/queue/${serviceId}`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Failed to fetch queue");
@@ -40,7 +41,7 @@ function QueueStatus({ services, refreshTrigger, tokenNumber }) {
         const token = localStorage.getItem("token");
 
         fetch(
-            `http://localhost:5000/api/queue/${serviceId}/statistics`,
+            `${API_URL}/api/queue/${serviceId}/statistics`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -85,7 +86,7 @@ function QueueStatus({ services, refreshTrigger, tokenNumber }) {
             for (const service of services) {
                 try {
                     const response = await fetch(
-                        `http://localhost:5000/api/queue/${service.id}`
+                        `${API_URL}/api/queue/${service.id}`
                     );
 
                     if (!response.ok) continue;
@@ -158,7 +159,7 @@ function QueueStatus({ services, refreshTrigger, tokenNumber }) {
         const handleQueueUpdated = async (data) => {
             try {
                 const response = await fetch(
-                    `http://localhost:5000/api/queue/${data.serviceId}`
+                    `${API_URL}/api/queue/${data.serviceId}`
                 );
 
                 if (!response.ok) {

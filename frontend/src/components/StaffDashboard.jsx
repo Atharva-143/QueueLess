@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function StaffDashboard({ services }) {
     const [selectedService, setSelectedService] = useState("");
@@ -17,7 +18,7 @@ function StaffDashboard({ services }) {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/queue/${serviceId}`
+                `${API_URL}/api/queue/${serviceId}`
             );
 
             if (!response.ok) {
@@ -43,7 +44,7 @@ function StaffDashboard({ services }) {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/queue/${serviceId}/statistics`,
+                `${API_URL}/api/queue/${serviceId}/statistics`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -119,7 +120,7 @@ function StaffDashboard({ services }) {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/queue/${selectedService}/${action}`,
+                `${API_URL}/api/queue/${selectedService}/${action}`,
                 {
                     method: "POST",
                     headers: {
@@ -253,8 +254,8 @@ function StaffDashboard({ services }) {
 
                             <span
                                 className={`staff-counter-status ${servingCustomer
-                                        ? "staff-counter-active"
-                                        : "staff-counter-idle"
+                                    ? "staff-counter-active"
+                                    : "staff-counter-idle"
                                     }`}
                             >
                                 <span />

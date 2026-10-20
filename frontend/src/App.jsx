@@ -5,6 +5,8 @@ import AdminDashboard from "./components/AdminDashboard";
 import OverviewCharts from "./components/OverviewCharts";
 import Login from "./components/Login";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function App() {
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
@@ -44,7 +46,7 @@ function App() {
   const fetchServices = () => {
     setLoadingServices(true);
 
-    fetch("http://localhost:5000/api/services")
+    fetch(`${API_URL}/api/services`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to load services.");
@@ -81,7 +83,7 @@ function App() {
     setTokenNumber(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/queue", {
+      const response = await fetch(`${API_URL}/api/queue`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

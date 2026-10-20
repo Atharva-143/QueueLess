@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const socket = io(API_URL);
 
 function AdminDashboard() {
     // Existing dashboard state
@@ -31,7 +32,7 @@ function AdminDashboard() {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/api/admin/analytics",
+                `${API_URL}/api/admin/analytics`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -102,8 +103,8 @@ function AdminDashboard() {
             const queryString = params.toString();
 
             const url = queryString
-                ? `http://localhost:5000/api/admin/completed-history?${queryString}`
-                : "http://localhost:5000/api/admin/completed-history";
+                ? `${API_URL}/api/admin/completed-history?${queryString}`
+                : `${API_URL}/api/admin/completed-history`;
 
             const response = await fetch(url, {
                 headers: {
