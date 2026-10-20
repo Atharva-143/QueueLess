@@ -24,6 +24,24 @@ CREATE TABLE IF NOT EXISTS services (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
+INSERT INTO services (name, description, is_active)
+SELECT 'College Office', 'General college administrative services', 1
+WHERE NOT EXISTS (
+    SELECT 1 FROM services WHERE name = 'College Office'
+);
+
+INSERT INTO services (name, description, is_active)
+SELECT 'Library', 'Library services', 1
+WHERE NOT EXISTS (
+    SELECT 1 FROM services WHERE name = 'Library'
+);
+
+INSERT INTO services (name, description, is_active)
+SELECT 'Canteen', 'Canteen services', 1
+WHERE NOT EXISTS (
+    SELECT 1 FROM services WHERE name = 'Canteen'
+);
+
 -- 3. Queues
 CREATE TABLE IF NOT EXISTS queues (
     id INT NOT NULL AUTO_INCREMENT,
@@ -119,4 +137,17 @@ CREATE TABLE IF NOT EXISTS test_data (
     id INT NOT NULL AUTO_INCREMENT,
     message VARCHAR(100) DEFAULT NULL,
     PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+-- 10. Queue Settings
+CREATE TABLE IF NOT EXISTS queue_settings (
+    id INT NOT NULL AUTO_INCREMENT,
+    queue_id INT NOT NULL,
+    max_capacity INT DEFAULT 100,
+    avg_service_time INT DEFAULT 10,
+    online_joining TINYINT(1) DEFAULT 1,
+    PRIMARY KEY (id),
+    KEY queue_id (queue_id),
+    CONSTRAINT queue_settings_ibfk_1
+        FOREIGN KEY (queue_id) REFERENCES queues(id)
 ) ENGINE=InnoDB;
