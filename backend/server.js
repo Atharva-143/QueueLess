@@ -262,9 +262,13 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST || "localhost",
+    port: Number(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME || "queueless"
+    database: process.env.DB_NAME || "queueless",
+    ssl: process.env.DB_HOST
+        ? { rejectUnauthorized: true }
+        : undefined
 });
 
 // ===============================
