@@ -498,17 +498,18 @@ app.get("/api/queue/:service_id", (req, res) => {
     }
 
     const sql = `
-    SELECT
-        id,
-        token_number,
-        status,
-        joined_at,
-        serving_started_at,
-        completed_at
-    FROM queue_entries
-    WHERE service_id = ?
-    AND status IN ('waiting', 'serving')
-    ORDER BY token_number ASC
+        SELECT
+            id,
+            token_number,
+            customer_name,
+            status,
+            joined_at,
+            serving_started_at,
+            completed_at
+        FROM queue_entries
+        WHERE service_id = ?
+        AND status IN ('waiting', 'serving')
+        ORDER BY token_number ASC
     `;
 
     db.query(sql, [service_id], (err, result) => {
