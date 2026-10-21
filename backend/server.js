@@ -268,7 +268,7 @@ const db = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || "queueless",
     ssl: process.env.DB_HOST
-        ? { rejectUnauthorized: true }
+        ? { rejectUnauthorized: false }
         : undefined
 });
 
