@@ -741,39 +741,45 @@ app.get(
         const { service_id } = req.params;
 
         const sql = `
-        SELECT
-            COUNT(CASE WHEN status = 'waiting' THEN 1 END) AS people_waiting,
+            SELECT
+                COUNT(
+                    CASE WHEN status = 'waiting' THEN 1 END
+                ) AS people_waiting,
 
-            COUNT(CASE WHEN status = 'serving' THEN 1 END) AS currently_serving,
+                COUNT(
+                    CASE WHEN status = 'serving' THEN 1 END
+                ) AS currently_serving,
 
-            COUNT(
-                CASE
-                    WHEN status = 'completed'
-                    AND DATE(completed_at) = CURDATE()
-                    THEN 1
-                END
-            ) AS completed_today,
+                COUNT(
+                    CASE
+                        WHEN status = 'completed'
+                        AND DATE(completed_at) = CURDATE()
+                        THEN 1
+                    END
+                ) AS completed_today,
 
-            COALESCE(
-                ROUND(
-                    AVG(
-                        TIMESTAMPDIFF(
-                            SECOND,
-                            serving_started_at,
-                            completed_at
-                        )
-                    ) / 60,
-                    1
-                ),
-                0
-            ) AS average_service_time
+                COALESCE(
+                    ROUND(
+                        AVG(
+                            CASE
+                                WHEN status = 'completed'
+                                AND serving_started_at IS NOT NULL
+                                AND completed_at IS NOT NULL
+                                THEN TIMESTAMPDIFF(
+                                    SECOND,
+                                    serving_started_at,
+                                    completed_at
+                                )
+                            END
+                        ) / 60,
+                        1
+                    ),
+                    0
+                ) AS average_service_time
 
-        FROM queue_entries
-        WHERE service_id = ?
-        AND status = 'completed'
-        AND serving_started_at IS NOT NULL
-        AND completed_at IS NOT NULL
-    `;
+            FROM queue_entries
+            WHERE service_id = ?
+        `;
 
         db.query(sql, [service_id], (err, result) => {
             if (err) {
@@ -785,7 +791,63 @@ app.get(
 
             res.json(result[0]);
         });
+    }
+);
+
+// Customer: Get queue statistics
+app.get("/api/queue/:service_id/completed-count", (req, res) => {
+    const { service_id } = req.params;
+
+    if (!/^\d+$/.test(service_id) || Number(service_id) <= 0) {
+        return res.status(400).json({
+            error: "Invalid service ID."
+        });
+    }
+
+    const sql = `
+        SELECT
+            COUNT(
+                CASE
+                    WHEN status = 'completed'
+                    AND DATE(completed_at) = CURDATE()
+                    THEN 1
+                END
+            ) AS completed_today,
+
+            COALESCE(
+                ROUND(
+                    AVG(
+                        CASE
+                            WHEN status = 'completed'
+                            AND serving_started_at IS NOT NULL
+                            AND completed_at IS NOT NULL
+                            THEN TIMESTAMPDIFF(
+                                SECOND,
+                                serving_started_at,
+                                completed_at
+                            )
+                        END
+                    ) / 60,
+                    1
+                ),
+                0
+            ) AS average_service_time
+
+        FROM queue_entries
+        WHERE service_id = ?
+    `;
+
+    db.query(sql, [service_id], (err, result) => {
+        if (err) {
+            console.error("Queue statistics error:", err);
+            return res.status(500).json({
+                error: "Failed to fetch queue statistics."
+            });
+        }
+
+        res.json(result[0]);
     });
+});
 
 // ===============================
 // ADMIN ANALYTICS

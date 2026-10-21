@@ -8,6 +8,7 @@ function QueueStatus({ services, refreshTrigger, tokenNumber }) {
     const [queue, setQueue] = useState([]);
     const [queueService, setQueueService] = useState("");
     const [averageServiceTime, setAverageServiceTime] = useState(5);
+    const [completedToday, setCompletedToday] = useState(0);
     const [notification, setNotification] = useState("");
 
     const notificationTimer = useRef(null);
@@ -32,36 +33,30 @@ function QueueStatus({ services, refreshTrigger, tokenNumber }) {
             });
     };
 
-    const fetchStatistics = (serviceId) => {
+    const fetchStatistics = async (serviceId) => {
         if (!serviceId) {
             setAverageServiceTime(5);
+            setCompletedToday(0);
             return;
         }
 
-        const token = localStorage.getItem("token");
+        try {
+            const response = await fetch(
+                `${API_URL}/api/queue/${serviceId}/completed-count`
+            );
 
-        fetch(
-            `${API_URL}/api/queue/${serviceId}/statistics`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+            if (!response.ok) {
+                throw new Error("Failed to fetch queue statistics");
             }
-        )
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Failed to fetch queue statistics");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                const avgTime = Number(data.average_service_time);
-                setAverageServiceTime(avgTime > 0 ? avgTime : 5);
-            })
-            .catch((error) => {
-                console.error("Error fetching queue statistics:", error);
-                setAverageServiceTime(5);
-            });
+
+            const data = await response.json();
+
+            const avgTime = Number(data.average_service_time);
+            setAverageServiceTime(avgTime > 0 ? avgTime : 5);
+            setCompletedToday(Number(data.completed_today) || 0);
+        } catch (error) {
+            console.error("Error fetching queue statistics:", error);
+        }
     };
 
     const refreshQueueData = (serviceId) => {
@@ -473,18 +468,22 @@ function QueueStatus({ services, refreshTrigger, tokenNumber }) {
                             </span>
                             <div>
                                 <span>Completed</span>
+                                <strong>{completedToday}</strong>
+                            </div>
+                        </article>
+                        <article className="qs-overview-item">
+                            <span className="qs-overview-icon qs-yellow">
+                                ◷
+                            </span>
+                            <div>
+                                <span>Average Service</span>
                                 <strong>
-                                    {
-                                        queue.filter(
-                                            (entry) =>
-                                                entry.status === "completed"
-                                        ).length
-                                    }
+                                    {averageServiceTime.toFixed(1)}
+                                    <small> min</small>
                                 </strong>
                             </div>
                         </article>
                     </div>
-
                     <div className="qs-section">
                         <div className="qs-section-heading">
                             <h3>Currently serving</h3>
