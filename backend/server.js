@@ -326,16 +326,8 @@ db.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-    db.query("SELECT DATABASE() AS database_name", (err, result) => {
-        if (err) {
-            console.error("Database check failed:", err);
-
-            return res.status(500).json({
-                error: "Internal server error."
-            });
-        }
-
-        res.json(result);
+    res.json({
+        message: "QueueLess API is running."
     });
 });
 
