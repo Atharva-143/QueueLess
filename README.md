@@ -10,6 +10,20 @@ QueueLess is a full-stack web application designed to simplify queue management.
 
 > **Note:** The backend is an API service, so opening its base URL in a browser may not display a user interface.
 
+## System Architecture
+
+The following diagram illustrates how QueueLess connects its frontend, backend APIs, real-time communication, and MySQL database.
+
+![QueueLess System Architecture](docs/queueless-architecture.png)
+
+**Architecture overview:**
+
+* **Frontend:** React and Vite, deployed on Render.
+* **Backend:** Node.js and Express.js for authentication and queue management APIs.
+* **Real-time communication:** Socket.IO for live queue status updates.
+* **Database:** MySQL hosted on Aiven.
+* **Security:** JWT authentication and role-based access control.
+
 
 ## Features
 
