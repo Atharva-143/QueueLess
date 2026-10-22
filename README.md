@@ -2,6 +2,15 @@
 
 QueueLess is a full-stack web application designed to simplify queue management. Customers can join service queues, track their token numbers, and receive real-time updates. Staff can manage queues, while administrators can monitor service performance through analytics.
 
+## Live Demo
+
+* **Frontend:** https://queueless-frontend-gdph.onrender.com
+* **Backend API:** https://queueless-iwvf.onrender.com
+* **GitHub Repository:** https://github.com/Atharva-143/QueueLess
+
+> **Note:** The backend is an API service, so opening its base URL in a browser may not display a user interface.
+
+
 ## Features
 
 - **Customer Dashboard:** Join queues, view token numbers, and track queue positions.
@@ -147,9 +156,11 @@ Make sure the backend is running and the frontend is configured to communicate w
 
 ## Future Improvements
 
-- Production deployment
-- Automated testing
-- Enhanced monitoring and analytics
+* Expand automated testing for critical queue workflows.
+* Enhance analytics and service-performance reporting.
+* Improve monitoring and error logging.
+* Further strengthen production security and reliability.
+
 
 ## Author
 
